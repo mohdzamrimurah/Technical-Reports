@@ -396,69 +396,83 @@ probability of an input belongs to a particular class.
 caption={logistic regression in tensor},label={list8}]
 
 import tensorflow as tf
+import os
+# modified
+def read_csv(batch_size, file_name, record_defaults):
+    #filename_queue = tf.train.string_input_producer([os.path.dirname(__file__) + "/" + file_name])
+    filename_queue = tf.train.string_input_producer([file_name])
+    reader = tf.TextLineReader(skip_header_lines=1)
+    key, value = reader.read(filename_queue)
+    #key, value = reader.read(file_name)
+    # decode_csv will convert a Tensor from type string (the text line) in
+    # a tuple of tensor columns with the specified defaults, which also
+    # sets the data type for each column
+    decoded = tf.decode_csv(value, record_defaults=record_defaults)
+    # batch actually reads the file and loads "batch_size" rows in a single tensor
+    return tf.train.shuffle_batch(decoded,
+                batch_size=batch_size,
+                capacity=batch_size * 50,
+                min_after_dequeue=5)
 
-# initialize variables / model parameters
-W = tf.Variable(tf.zeros([5, 1]), name="weights")
-# array([[0.],
-#        [0.]], dtype=float32)
-b = tf.Variable(0., name="bias")
 
 def combine_inputs(X):
-    #return tf.matmul(X,W) + b
-    return tf.sigmoid(combine_inputs(X))
-
-def inference(X):
     return tf.matmul(X, W) + b
-    # compute inference model over data X and return the result
+
 
 def loss(X, Y):
     # compute loss over training data X and expected outputs Y
-    Y_predicted = inference(X)
-    return tf.reduce_sum(tf.squared_difference(Y, Y_predicted))
-
-def inputs():
-    # read / generate input training data X and expected outputs Y
-    weight_age = [[84, 46], [73, 20], [65, 52], [70, 30], [76, 57],
-                  [69, 25], [63, 28], [72, 36], [79 , 57],[75, 44]]
-    blood_fat_content = [354, 190, 405, 263, 451, 302, 288, 385,
-                         402, 365]
-    return tf.to_float(weight_age), tf.to_float(blood_fat_content)
+    #Y_predicted = inference(X)
+    #return tf.reduce_sum(tf.squared_difference(Y, Y_predicted))
+    return tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(combine_inputs(X), Y))
 
 def train(total_loss):
     # train / adjust model parameters according to computed total loss
-    learning_rate = 0.000001
+    learning_rate = 0.01
+    print("in train")
     return tf.train.GradientDescentOptimizer(learning_rate).minimize(total_loss)
 
-def evaluate(sess, X, Y):
-    # evaluate the resulting trained model# Launch the graph in
-    # a session, setup boilerplate
-    print(sess.run(inference([[80., 25.]])))
-    print(sess.run(inference([[65., 25.]])))
+W = tf.Variable(tf.zeros([5, 1]), name="weights")
+b = tf.Variable(0., name="bias")
 
-# saver = tf.train.Saver()
+
+# all tf variable must be declare in session!
 
 with tf.Session() as sess:
-    tf.initialize_all_variables().run()
-    X, Y = inputs()
+    init = tf.global_variables_initializer()
+    sess.run(init)
+    v0 = sess.run(W)    
+    print(v0) # will show you your variable.
+    v1 = sess.run(b)
+    print(v1)
+    
+    #v2 = sess.run(pid)
+    #print(v2)
+
+	# this all tensors
+    pid, survived, pclass, sex, age = read_csv(100, "train.csv", [[0.0], [0.0], [0],[""],[0.0]])
+
+    first_class = tf.to_float(tf.equal(pclass,[1]))
+    second_class = tf.to_float(tf.equal(pclass, [2]))
+    third_class = tf.to_float(tf.equal(pclass, [3]))
+    gender = tf.to_float(tf.equal(sex, ["female"]))
+
+    features = tf.transpose(tf.pack([first_class, second_class, third_class, gender, age]))
+    survived = tf.reshape(survived, [100, 1])
+    
+    X, Y = features, survived
+    
+    print("done X Y")
     total_loss = loss(X, Y)
+    print("done total loss")
     train_op = train(total_loss)
     coord = tf.train.Coordinator()
-    threads = tf.train.start_queue_runners(sess = sess,
-        coord = coord)
-    # actual training loop
-    training_steps = 500000
+    print("after coord")
+    threads = tf.train.start_queue_runners(sess = sess,coord = coord)
+    training_steps = 5000
+    print("after threads")
     for step in range(training_steps):
         sess.run([train_op])
-        # for debugging and learning purposes,
-        # see how the loss gets decremented thru
-        # training steps
-        if step % 10000 == 0:
-            print("loss:", sess.run([total_loss]))
-        #if step % 500 == 0:
-        #    saver.save(sess, 'my-model',
-        #               global_step=training_steps)
-
-    evaluate(sess, X, Y)
+        if step % 100 == 0: print("loss:", step, sess.run([total_loss]))
     coord.request_stop()
     coord.join(threads)
     sess.close()
