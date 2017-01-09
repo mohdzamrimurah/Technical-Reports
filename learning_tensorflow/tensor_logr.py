@@ -6,6 +6,8 @@ Created on Mon Jan  9 00:17:46 2017
 @author: zamri
 """
 
+# logistic regression
+
 
 import tensorflow as tf
 
@@ -15,9 +17,11 @@ import tensorflow as tf
 W = tf.Variable(tf.zeros([2, 1]), name="weights")
 # array([[0.],
 #        [0.]], dtype=float32)
-
 b = tf.Variable(0., name="bias")
 
+def combine_inputs(X):
+    #return tf.matmul(X,W) + b
+    return tf.sigmoid(combine_inputs(X))
 
 def inference(X):
     return tf.matmul(X, W) + b
@@ -26,17 +30,23 @@ def inference(X):
 
 def loss(X, Y):
     # compute loss over training data X and expected outputs Y
-    Y_predicted = inference(X)
-    return tf.reduce_sum(tf.squared_difference(Y, Y_predicted))
+    #Y_predicted = inference(X)
+    #return tf.reduce_sum(tf.squared_difference(Y, Y_predicted))
+    return tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(combine_inputs(X), Y))
 
-
-def inputs():
-    # read / generate input training data X and expected outputs Y
-    weight_age = [[84, 46], [73, 20], [65, 52], [70, 30], [76, 57], 
-                  [69, 25], [63, 28], [72, 36], [79 , 57],[75, 44]]
-    blood_fat_content = [354, 190, 405, 263, 451, 302, 288, 385, 
-                         402, 365]
-    return tf.to_float(weight_age), tf.to_float(blood_fat_content)
+def read_csv(batch_size, file_name, record_defaults):
+    filename_queue = tf.train.string_input_producer([os.path.dirname(__file__) + "/" + file_name])
+    reader = tf.TextLineReader(skip_header_lines=1)
+    key, value = reader.read(filename_queue)
+    # decode_csv will convert a Tensor from type string (the text line) in
+    # a tuple of tensor columns with the specified defaults, which also
+    # sets the data type for each column
+    decoded = tf.decode_csv(value, record_defaults=record_defaults)
+    # batch actually reads the file and loads "batch_size" rows in a single tensor
+    return tf.train.shuffle_batch(decoded,
+                batch_size=batch_size,
+                capacity=batch_size * 50,
+                min_after_dequeue=batch_size)
 
 
 def train(total_loss):
@@ -46,7 +56,7 @@ def train(total_loss):
 
 
 def evaluate(sess, X, Y):
-    # evaluate the resulting trained model# Launch the graph in 
+    # evaluate the resulting trained model# Launch the graph in
     # a session, setup boilerplate
     print(sess.run(inference([[80., 25.]])))
     print(sess.run(inference([[65., 25.]])))
@@ -64,20 +74,20 @@ with tf.Session() as sess:
 
     coord = tf.train.Coordinator()
 
-    threads = tf.train.start_queue_runners(sess = sess, 
+    threads = tf.train.start_queue_runners(sess = sess,
         coord = coord)
 
     # actual training loop
     training_steps = 500000
     for step in range(training_steps):
-        sess.run([train_op])  
-        # for debugging and learning purposes, 
-        # see how the loss gets decremented thru 
+        sess.run([train_op])
+        # for debugging and learning purposes,
+        # see how the loss gets decremented thru
         # training steps
         if step % 10000 == 0:
             print("loss:", sess.run([total_loss]))
         #if step % 500 == 0:
-        #    saver.save(sess, 'my-model', 
+        #    saver.save(sess, 'my-model',
         #               global_step=training_steps)
 
     evaluate(sess, X, Y)

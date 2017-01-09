@@ -1,13 +1,13 @@
-\documentclass[vecarrow]{svproc} 
-% % RECOMMENDED  % to typesetURLs, URIs, and DOIs 
-\usepackage{url} 
+\documentclass[vecarrow]{svproc}
+% % RECOMMENDED  % to typesetURLs, URIs, and DOIs
+\usepackage{url}
 \def\UrlFont{\rmfamily}
 
 \usepackage{listings}
 \usepackage{color}
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82} 
+\definecolor{mauve}{rgb}{0.58,0,0.82}
 \lstset{frame=tb,
  aboveskip=3mm, belowskip=3mm,
 showstringspaces=false, columns=flexible,
@@ -21,51 +21,51 @@ breakatwhitespace=true, tabsize=3 }
 
 \usepackage{booktabs}
 
-\usepackage{rotating} 
+\usepackage{rotating}
 
 \usepackage{pdflscape}
 
 %\usepackage{amsmath}
 
-\begin{document} 
+\begin{document}
 \mainmatter % start of a contribution %
 
 \title{Learning tensorflow} %
 
-\titlerunning{Learning tensorflow} 
-% abbreviated title (for running head) 
+\titlerunning{Learning tensorflow}
+% abbreviated title (for running head)
 % also used for the TOC unless
-% \toctitle is used % 
+% \toctitle is used %
 \author{Mohd Zamri Murah} %
-%\authorrunning{Ivar Ekeland et al.} % abbreviated author list (for running head) 
+%\authorrunning{Ivar Ekeland et al.} % abbreviated author list (for running head)
 % list of authors for the TOC (use if author list has to be modified)
 %\tocauthor{Ivar Ekeland, Roger Temam, Jeffrey Dean, David
  \institute{Center for Artificial Intelligence
 Technology\\ Fakulti Teknologi Sains
 Maklumat\\ Universiti Kebangsaan Malaysia\\
-\email{zamri@ukm.edu.my}} 
+\email{zamri@ukm.edu.my}}
 
-\maketitle % typeset the title of the contribution 
+\maketitle % typeset the title of the contribution
 
-\begin{abstract} 
+\begin{abstract}
 
 Tensorflow is an open-source
 deep learning library developed by Google.
 It has been used in many areas such as image recognition, text
 to speech engine, pattern recognition and
 big data. This note provide an introductory concepts for
-computation using tensorflow. 
+computation using tensorflow.
 
-\keywords{deep learning} 
+\keywords{deep learning}
 
-\end{abstract} % 
+\end{abstract} %
 
-\section{Introduction} 
+\section{Introduction}
 
 Tensorflow is an open-source deep learning library
 developed by Google\cite{abadi2015tensorflow}. It is based on
 two basic ideas; computational graph and
-tensor. 
+tensor.
 
 A basic computational graph is shown in
 figure~\ref{fig:1}. The figure illustrates the two
@@ -77,42 +77,42 @@ nodes, and are typically drawn as arrows. Thus, in
 figure~\ref{fig:1}, we have a node for computation
 $add$  and edge $1$ and edge $2$ into the node $add$ and,
 edge $3$ as edge output from the node
-$add$. 
+$add$.
 
-\begin{figure} 
-% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics 
-% Use the relevant command to insert your figure file. 
+\begin{figure}
+% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+% Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
 \centering{\fbox{\includegraphics[scale=.10]{basic_node.png}}} %
 \caption{A basic computational graph with node and edge.}
-\label{fig:1} 
+\label{fig:1}
 % Give a unique label
-\end{figure} 
+\end{figure}
 
-In figure~\ref{fig:2}, we have a more complex computation. In figure~\ref{fig:2}, we have nodes $input$, $input$, 
+In figure~\ref{fig:2}, we have a more complex computation. In figure~\ref{fig:2}, we have nodes $input$, $input$,
 $add$,$mult$ and $add$. In total, we have 5 nodes. Also, we have 9 edges; $5,3,5,5,3,3,15,8,23$. Succintly, we could write the model as; $ N=\{input, add,mult, add\}$ and $E=\{5,3,5,5,3,3,15,8,23\}$.
 
-\begin{figure} 
-% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics 
-% Use the relevant command to insert your figure file. 
+\begin{figure}
+% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+% Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
 \centering{\fbox{\includegraphics[scale=.10]{node_2.png}}} %
 \caption{A more complex computational graph with nodes and edges.}
-\label{fig:2} 
+\label{fig:2}
 % Give a unique label
-\end{figure} 
+\end{figure}
 
 We can also have a more complicated model as figure~\ref{fig:3}.
 
-\begin{figure} 
-% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics 
-% Use the relevant command to insert your figure file. 
+\begin{figure}
+% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+% Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
 \centering{\fbox{\includegraphics[scale=.10]{node_3.png}}} %
 \caption{A edge can link to any node.}
-\label{fig:3} 
+\label{fig:3}
 % Give a unique label
-\end{figure} 
+\end{figure}
 
 
 \section{Computational graph}
@@ -127,7 +127,7 @@ In listing~\ref{list1}, we provide the code for a tensor model based on our prev
 
 \renewcommand{\thelstlisting}{\arabic{lstlisting}}
 
-\begin{lstlisting}[language=Python, 
+\begin{lstlisting}[language=Python,
 caption={an example of tensorflow model},label={list1}]
 import	tensorflow	as	tf
 a =	tf.constant(5, name="input_a")
@@ -145,20 +145,20 @@ sess.close()
 If we run tensorboard, we have the figure~\ref{fig:4}.
 % tensorboard	--logdir="my_graph"
 
-\begin{figure} 
-% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics 
-% Use the relevant command to insert your figure file. 
+\begin{figure}
+% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+% Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
 \centering{\fbox{\includegraphics[scale=.10]{node_4.png}}} %
 \caption{A graphical view of the tensorflow model using tensorboard.}
-\label{fig:4} 
+\label{fig:4}
 % Give a unique label
-\end{figure} 
+\end{figure}
 
 \section{Tensor}
 
-Tensorflow data model is based on tensor. Tensor is an $n$-dimensional abstraction of matrices. We have 
-scalar $\eta=[5]$ equivalent to 0-D tensor, a vector $\vec{v}=[5, 3]$ equivalent to 1-D tensor and a matrix 
+Tensorflow data model is based on tensor. Tensor is an $n$-dimensional abstraction of matrices. We have
+scalar $\eta=[5]$ equivalent to 0-D tensor, a vector $\vec{v}=[5, 3]$ equivalent to 1-D tensor and a matrix
 $A_{m,n}$ is a 2-D tensor\cite{bowen2008introduction}\cite{kolecki2002introduction}.
 
 Two vectors $\vec{v}$ and $\vec{w}$ can be combined via inner product to form a new scalar $\eta$. Two
@@ -176,17 +176,17 @@ Quantities with no sense of direction are scalars $\eta$, these are defined as o
 
 In figure~\ref{fig:5}, we have the same model in tensor notation.
 
-\begin{figure} 
-% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics 
-% Use the relevant command to insert your figure file. 
+\begin{figure}
+% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+% Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
 \centering{\fbox{\includegraphics[scale=.10]{node_5.png}}} %
 \caption{A graphical view of the tensorflow model using tensorboard.}
-\label{fig:5} 
+\label{fig:5}
 % Give a unique label
-\end{figure} 
+\end{figure}
 
-\begin{lstlisting}[language=Python, 
+\begin{lstlisting}[language=Python,
 caption={model in tensor},label={list2}]
 import tensorflow as tf
 a = tf.constant([5, 3, 9], name="input_a")
@@ -202,7 +202,7 @@ output = sess.run(d)
 \end{lstlisting}
 
 We could examine the shape of a tensor using $tf.shape$.
-\begin{lstlisting}[language=Python, 
+\begin{lstlisting}[language=Python,
 caption={shape of tensor},label={list3}]
 tf.shape(a) # <tf.Tensor 'Shape:0' shape=(1,) dtype=int32>
 tf.shape(b) # <tf.Tensor 'Shape_1:0' shape=(0,) dtype=int32>
@@ -217,7 +217,7 @@ Tensors	are	just	a	superset	of	matrices!.
 
 Nodes in tensorflow are operations on tensors. Nodes perform operation on or with tensor objects, and output tensors objects such as scalar or another tensor. These outputs can be use as input by other nodes in the computational graph. An example of tensor operation is shown in listing~\ref{list4}.
 
-\begin{lstlisting}[language=Python, 
+\begin{lstlisting}[language=Python,
 caption={operations on tensors},label={list4}]
 #Initialize	some	tensors	to	use	in	computation
 a = np.array([2,	3],	dtype=np.int32) # tensor a
@@ -231,7 +231,7 @@ c = tf.add(a,	b)
 
 Variables in tensor models are called \textit{placeholders}. have their values specified when created.
 
-\begin{lstlisting}[language=Python, 
+\begin{lstlisting}[language=Python,
 caption={use placeholders in tensor},label={list5}]
 import tensorflow as tf
 import numpy as np
@@ -254,12 +254,12 @@ input_dict = { a: np.array([5, 3], dtype = np.int32)}
 sess.run(d, feed_dict = input_dict)
 \end{lstlisting}
 
-Tensors (e.g $a, b , c., d$ in above model)  and $operation$ (e.g node such 
+Tensors (e.g $a, b , c., d$ in above model)  and $operation$ (e.g node such
 $add, mult, reduce_prod$)
 objects are immutable ( cannot be changed). $Variables$ objects contain
 mutable tensor values that are persistent across sessions.
 
-\begin{lstlisting}[language=Python, 
+\begin{lstlisting}[language=Python,
 caption={use placeholders in tensor},label={list6}]
 import tensorflow as tf
 #Pass in a starting value of three for the variable
@@ -272,7 +272,7 @@ b =	tf.mul(8,	my_var)
 The	initial value of Variables will often be large tensors of zeros, ones,	or random
 values.
 
-\begin{lstlisting}[language=Python, 
+\begin{lstlisting}[language=Python,
 caption={use placeholders in tensor},label={list7}]
 #2x2 matrix	of zeros
 zeros = tf.zeros([2,	2])
@@ -296,25 +296,174 @@ sess.run([zeros,ones, uniform, normal])
 
 Supervised learning concerns with inference models where we have input data dan output results. The objective is to find inference models with the minimun loss functions. This is done through training. The inference models can be used for predictions of new input data. The basic training loop is given on figure~\ref{fig:6}.
 
-\begin{figure} 
-% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics 
-% Use the relevant command to insert your figure file. 
+\begin{figure}
+% https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+% Use the relevant command to insert your figure file.
 % For example, with the graphicx package use
 \centering{\fbox{\includegraphics[scale=.40]{training_loop.png}}} %
 \caption{A basic training loop.}
-\label{fig:6} 
+\label{fig:6}
 % Give a unique label
 \end{figure}
 
 \section{Linear regression in tensor}
 
-In linear regression, we have the standard simple linear regression equation as 
-$ y = ax + b $ or in tensor format we have $ Y = XW^t + b$ where $W$ is weight and 
+In linear regression, we have the standard simple linear regression equation as
+$ y = ax + b $ or in tensor format we have $ Y = XW^t + b$ where $W$ is weight and
 $b$ is bias.
 
 The $L2$ norm loss function is defined as $ L_2 = \sum_i (y_i - \hat{y}_i)^2$. The
 objective of the training is to minimize this $L_2$ norm loss function.
 
-\bibliography{tensorflow} 
+\begin{lstlisting}[language=Python,
+caption={linear regression in tensor},label={list8}]
+
+import tensorflow as tf
+
+# initialize variables / model parameters
+W = tf.Variable(tf.zeros([2, 1]), name="weights")
+# array([[0.],
+#        [0.]], dtype=float32)
+b = tf.Variable(0., name="bias")
+
+def inference(X):
+    return tf.matmul(X, W) + b
+    # compute inference model over data X and return the result
+
+def loss(X, Y):
+    # compute loss over training data X and expected outputs Y
+    Y_predicted = inference(X)
+    return tf.reduce_sum(tf.squared_difference(Y, Y_predicted))
+
+def inputs():
+    # read / generate input training data X and expected outputs Y
+    weight_age = [[84, 46], [73, 20], [65, 52], [70, 30], [76, 57],
+                  [69, 25], [63, 28], [72, 36], [79 , 57],[75, 44]]
+    blood_fat_content = [354, 190, 405, 263, 451, 302, 288, 385,
+                         402, 365]
+    return tf.to_float(weight_age), tf.to_float(blood_fat_content)
+
+def train(total_loss):
+    # train / adjust model parameters according to computed total loss
+    learning_rate = 0.000001
+    return tf.train.GradientDescentOptimizer(learning_rate).minimize(total_loss)
+
+def evaluate(sess, X, Y):
+    # evaluate the resulting trained model# Launch the graph in
+    # a session, setup boilerplate
+    print(sess.run(inference([[80., 25.]])))
+    print(sess.run(inference([[65., 25.]])))
+
+# saver = tf.train.Saver()
+
+with tf.Session() as sess:
+    tf.initialize_all_variables().run()
+    X, Y = inputs()
+    total_loss = loss(X, Y)
+    train_op = train(total_loss)
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess = sess,
+        coord = coord)
+    # actual training loop
+    training_steps = 500000
+    for step in range(training_steps):
+        sess.run([train_op])
+        # for debugging and learning purposes,
+        # see how the loss gets decremented thru
+        # training steps
+        if step % 10000 == 0:
+            print("loss:", sess.run([total_loss]))
+        #if step % 500 == 0:
+        #    saver.save(sess, 'my-model',
+        #               global_step=training_steps)
+
+    evaluate(sess, X, Y)
+    coord.request_stop()
+    coord.join(threads)
+    sess.close()
+\end{lstlisting}
+
+\section{Logistic regression in tensor}
+
+Linear regression model predicts a continous values. Logistic regression predict
+probability of an input belongs to a particular class.
+
+\begin{equation}
+  f(x) = \frac{1}{1 + e^{-x}}
+\end{equation}
+
+\begin{lstlisting}[language=Python,
+caption={logistic regression in tensor},label={list8}]
+
+import tensorflow as tf
+
+# initialize variables / model parameters
+W = tf.Variable(tf.zeros([5, 1]), name="weights")
+# array([[0.],
+#        [0.]], dtype=float32)
+b = tf.Variable(0., name="bias")
+
+def combine_inputs(X):
+    #return tf.matmul(X,W) + b
+    return tf.sigmoid(combine_inputs(X))
+
+def inference(X):
+    return tf.matmul(X, W) + b
+    # compute inference model over data X and return the result
+
+def loss(X, Y):
+    # compute loss over training data X and expected outputs Y
+    Y_predicted = inference(X)
+    return tf.reduce_sum(tf.squared_difference(Y, Y_predicted))
+
+def inputs():
+    # read / generate input training data X and expected outputs Y
+    weight_age = [[84, 46], [73, 20], [65, 52], [70, 30], [76, 57],
+                  [69, 25], [63, 28], [72, 36], [79 , 57],[75, 44]]
+    blood_fat_content = [354, 190, 405, 263, 451, 302, 288, 385,
+                         402, 365]
+    return tf.to_float(weight_age), tf.to_float(blood_fat_content)
+
+def train(total_loss):
+    # train / adjust model parameters according to computed total loss
+    learning_rate = 0.000001
+    return tf.train.GradientDescentOptimizer(learning_rate).minimize(total_loss)
+
+def evaluate(sess, X, Y):
+    # evaluate the resulting trained model# Launch the graph in
+    # a session, setup boilerplate
+    print(sess.run(inference([[80., 25.]])))
+    print(sess.run(inference([[65., 25.]])))
+
+# saver = tf.train.Saver()
+
+with tf.Session() as sess:
+    tf.initialize_all_variables().run()
+    X, Y = inputs()
+    total_loss = loss(X, Y)
+    train_op = train(total_loss)
+    coord = tf.train.Coordinator()
+    threads = tf.train.start_queue_runners(sess = sess,
+        coord = coord)
+    # actual training loop
+    training_steps = 500000
+    for step in range(training_steps):
+        sess.run([train_op])
+        # for debugging and learning purposes,
+        # see how the loss gets decremented thru
+        # training steps
+        if step % 10000 == 0:
+            print("loss:", sess.run([total_loss]))
+        #if step % 500 == 0:
+        #    saver.save(sess, 'my-model',
+        #               global_step=training_steps)
+
+    evaluate(sess, X, Y)
+    coord.request_stop()
+    coord.join(threads)
+    sess.close()
+\end{lstlisting}
+
+\bibliography{tensorflow}
 \bibliographystyle{splncs_srt}
 \end{document}
